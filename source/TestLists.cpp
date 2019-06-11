@@ -111,3 +111,27 @@ TEST_CASE("provide access to the last element with end", "[iterators]"){
     list.push_back(100);
     REQUIRE (100 == *list.end());
 }
+
+TEST_CASE("compare lists", "[compare]"){
+    List<int> list;
+    list.push_front(1);
+    list.push_front(2);
+    list.push_front(3);
+    list.push_front(4);
+    List<int> list1;
+    list1.push_front(1);
+    list1.push_front(2);
+    list1.push_front(3);
+    list1.push_front(4);
+    REQUIRE(list1 == list);
+    REQUIRE(!(list1 != list));
+    List<int> list_empty;
+    List<int> list_empty1;
+    REQUIRE(list_empty == list_empty1);
+    REQUIRE(!(list_empty != list_empty1));
+
+    REQUIRE(list_empty != list);
+    REQUIRE(!(list_empty == list));
+
+
+}

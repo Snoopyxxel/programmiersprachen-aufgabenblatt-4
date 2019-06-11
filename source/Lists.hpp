@@ -106,11 +106,39 @@ public:
     /* ... */
     //TODO: Assignment operator (Aufgabe 4.12)
 
-    /* Checks if two Lists are equal */
-    //TODO: operator== (Aufgabe 4.7)
+    bool operator==(List<T> const& rhs){
+        if(first_ == nullptr and rhs.first_ == nullptr){
+            return true;
+        } else if(first_ == nullptr xor rhs.first_ == nullptr){
+            return false;
+        } else{
+            auto lhs_elem = first_;
+            auto rhs_elem = rhs.first_;
+            for(int i = 0; i < size_; ++i){
+                if(lhs_elem->value != rhs_elem->value){
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
 
-    /* Checks if two Lists are unequal */
-    //TODO: operator!= (Aufgabe 4.7)
+    bool operator!=(List<T> const& rhs){
+        if(first_ == nullptr and rhs.first_ == nullptr){
+            return false;
+        } else if(first_ == nullptr xor rhs.first_ == nullptr){
+            return true;
+        } else{
+            auto lhs_elem = first_;
+            auto rhs_elem = rhs.first_;
+            for(int i = 0; i < size_; ++i){
+                if(lhs_elem->value == rhs_elem->value){
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
 
     /* Destructor: Deletes all the Elements of the List and the list itself */
     ~List() {
