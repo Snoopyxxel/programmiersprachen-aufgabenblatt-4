@@ -35,30 +35,30 @@ struct ListIterator {
 
     /* DESCRIPTION  operator->() */
     T* operator->() const {
-        return *node;
+        return &node->value;
     }
 
-    /* ... */
+    /* returns an iterator to the next element from self */
     ListIterator<T>& operator++() {
-        //not implemented yet
-        return {};
-    } //PREINCREMENT
+        node = node->next;
+        return *this;
+    }
 
-    /* ... */
+    /* returns an iterator to  */
     ListIterator<T> operator++(int) {
-        //not implemented yet
-        return {};
+        auto old_node = node;
+        node = node->next;
+        return ListIterator<T>{old_node};
     } //POSTINCREMENT (signature distinguishes)
 
     /* ... */
     bool operator==(ListIterator<T> const& x) const {
-        //not implemented yet
+        return node == x.node;
     }
 
     /* ... */
     bool operator!=(ListIterator<T> const& x) const {
-        //not implemented yet
-    }
+        return node != x.node;    }
 
     /* ... */
     ListIterator<T> next() const {
@@ -119,14 +119,12 @@ public:
 
     /* Returns iterator to start of List */
     ListIterator<T> begin() {
-        ////not implemented yet
-        return ListIterator<T>{};
+        return ListIterator<T>{first_};
     }
 
     /* Returns Operator to end of List */
     ListIterator<T> end() {
-        ////not implemented yet
-        return ListIterator<T>{};
+        return ListIterator<T>{last_};
     }
 
     /* Deletes all the elemtents of the List, but not the List itself */

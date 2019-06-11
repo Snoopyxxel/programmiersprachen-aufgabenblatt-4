@@ -59,7 +59,55 @@ TEST_CASE("should be empty after clearing" , "[modifiers]")
     list.push_front(4);
     list.clear();
     REQUIRE(list.empty());
+
+}
+
+TEST_CASE("iterator * and ->", "[iterator]"){
     ListNode<std::string>* node = new ListNode<std::string>{"lol"};
     ListIterator<std::string> b{node};
     std::string c = *b;
+    REQUIRE(c.compare("lol") == 0);
+    REQUIRE(b->compare("lol") == 0);
+}
+
+TEST_CASE("iterator operator++(), ==, !=, next()", "[iterators]"){
+    ListNode<std::string>* node = new ListNode<std::string>{"0"};
+    ListNode<std::string>* node1 = new ListNode<std::string>{"1"};
+    ListNode<std::string>* node2 = new ListNode<std::string>{"2"};
+    ListNode<std::string>* node3 = new ListNode<std::string>{"3"};
+    ListNode<std::string>* node4 = new ListNode<std::string>{"4"};
+
+
+    node->next = node1;
+    node1->next = node2;
+    node2->next = node3;
+    node3->next = node4;
+    ListIterator<std::string> b{node};
+    REQUIRE(b++->compare("0") == 0);
+    REQUIRE((++b)->compare("2") == 0);
+    REQUIRE(b->compare("2") == 0);
+    ListIterator<std::string> c{node2};
+    REQUIRE(c == b);
+    REQUIRE(!(c != b));
+    REQUIRE(b.next()->compare("3") == 0);
+}
+
+TEST_CASE("should be an empty range after default construction", "[iterators]"){
+    List<int> list;
+    auto b = list.begin();
+    auto e = list.end();
+    REQUIRE(b == e);
+    REQUIRE(b.node == nullptr);
+    REQUIRE(e.node == nullptr);
+}
+TEST_CASE("provide access to the first element with begin", "[iterators]"){
+    List<int> list;
+    list.push_front(42);
+    REQUIRE (42 == *list.begin());
+}
+TEST_CASE("provide access to the last element with end", "[iterators]"){
+    List<int> list;
+    list.push_front(42);
+    list.push_back(100);
+    REQUIRE (100 == *list.end());
 }
