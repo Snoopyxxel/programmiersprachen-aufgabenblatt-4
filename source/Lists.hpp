@@ -118,6 +118,8 @@ public:
                 if(lhs_elem->value != rhs_elem->value){
                     return false;
                 }
+                rhs_elem = rhs_elem->next;
+                lhs_elem = lhs_elem->next;
             }
             return true;
         }
@@ -135,6 +137,8 @@ public:
                 if(lhs_elem->value == rhs_elem->value){
                     return false;
                 }
+                rhs_elem = rhs_elem->next;
+                lhs_elem = lhs_elem->next;
             }
             return true;
         }
