@@ -1,4 +1,6 @@
 #define CATCH_CONFIG_MAIN
+
+#include <algorithm>
 #include "catch.hpp"
 #include "Lists.hpp"
 
@@ -241,8 +243,7 @@ TEST_CASE("free-funktion-reverse with two elements", "[modifiers]"){
     REQUIRE(reverse(list3) == list4);
 }
 
-TEST_CASE("move constructor", "[constructor]")
-{
+TEST_CASE("move constructor", "[constructor]"){
     List<int> list;
     list.push_front(1);
     list.push_front(2);
@@ -252,4 +253,34 @@ TEST_CASE("move constructor", "[constructor]")
     REQUIRE(0 == list.size());
     REQUIRE(list.empty());
     REQUIRE(4 == list2.size());
+}
+
+TEST_CASE("initializer-list constructor", "[constructor]"){
+    List<std::string> list1;
+    list1.push_back("1");
+    list1.push_back("2");
+    list1.push_back("3");
+    list1.push_back("4");
+
+    List<std::string> list{"1", "2", "3", "4"};
+
+    REQUIRE(list == list1);
+
+    List<int> list2;
+    List<int> list3{};
+
+    REQUIRE(list2 == list3);
+}
+
+TEST_CASE("assignment operator", "[modifiers]"){
+    List<int> list{1,2,3,4};
+    List<int> list1{4,5};
+    List<int> list3;
+
+    list3 = list;
+    list1 = list;
+
+    REQUIRE(list1 == list);
+    REQUIRE(list.size() == 4);
+    REQUIRE(list3 == list);
 }

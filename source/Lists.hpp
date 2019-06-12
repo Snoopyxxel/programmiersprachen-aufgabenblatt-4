@@ -112,8 +112,8 @@ public:
     }
 
 
-    List<T>& operator=(List<T> x){
-        x.swap(*this);
+    List<T>& operator=(List<T> rhs){
+        rhs.swap(*this);
         return *this;
     }
 
@@ -145,7 +145,9 @@ public:
 
     /* Erstellt neue Liste mit übergebenen Werten als Knoten */
     List(std::initializer_list<T> ini_list) {
-        //not implemented yet
+        for (int i = 0; i < ini_list.size(); ++i){
+            push_back(*(ini_list.begin() + i));
+        }
     }
 
     /* ... */
