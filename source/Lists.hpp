@@ -48,8 +48,9 @@ struct ListIterator {
 
     ListIterator<T> operator+(int plus) {
         ListIterator<T> erg{node};
-        for(int i = 0; i < plus; ++i){
+        while(erg.node->next != nullptr and plus > 0){
             ++erg;
+            --plus;
         }
         return erg;
     }
@@ -59,8 +60,12 @@ struct ListIterator {
         auto old_node = node;
         if (node->next != nullptr) {
             node = node->next;
+            return ListIterator<T>{old_node};
+        } else{
+            ListNode<T>* end = new ListNode<T>{};
+            end->prev = old_node;
+            return ListIterator<T>{end};
         }
-        return ListIterator<T>{old_node};
     } //POSTINCREMENT (signature distinguishes)
 
     /* returns true if nodes of iterators are equal */
@@ -80,8 +85,6 @@ struct ListIterator {
             return ListIterator{nullptr};
         }
     }
-
-
     ListNode<T>* node = nullptr;
 };
 
@@ -202,7 +205,7 @@ public:
 
     /* Returns iterator to end of List */
     ListIterator<T> end() const {
-        return ListIterator<T>{last_};
+        return ListIterator<T>{nullptr};
     }
 
     /* Deletes all the elemtents of the List, but not the List itself */
@@ -218,14 +221,17 @@ public:
         if(pos_it.node == first_){
             push_front(data);
             return begin();
-        } else {
-            ListNode<T>* in = new ListNode<T>{data, pos_it.node->prev, pos_it.node};
-            in->prev->next = in;
-            in->next->prev = in;
-            ++size_;
-            return ListIterator<T>{in};
+        } else if(pos_it.node == nullptr){
+                push_back(data);
+            return ListIterator<T>{last_};
+        }  else {
+                ListNode<T>* in = new ListNode<T>{data, pos_it.node->prev, pos_it.node};
+                in->prev->next = in;
+                in->next->prev = in;
+                ++size_;
+                return ListIterator<T>{in};
+            }
         }
-    }
 
     /* reverses the list */
     void reverse(){
