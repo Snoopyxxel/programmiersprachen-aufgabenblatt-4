@@ -123,7 +123,15 @@ TEST_CASE("compare lists", "[compare]"){
     list1.push_front(2);
     list1.push_front(3);
     list1.push_front(4);
+    List<int> list2;
+    list2.push_front(1);
+    list2.push_front(2);
+    list2.push_front(5);
+    list2.push_front(4);
+
     REQUIRE(list1 == list);
+    REQUIRE(list != list2);
+    REQUIRE(!(list == list2));
     REQUIRE(!(list1 != list));
     List<int> list_empty;
     List<int> list_empty1;
@@ -132,6 +140,14 @@ TEST_CASE("compare lists", "[compare]"){
 
     REQUIRE(list_empty != list);
     REQUIRE(!(list_empty == list));
+}
 
-
+TEST_CASE("copy constructor", "[constructor]"){
+    List<int> list;
+    list.push_front(1);
+    list.push_front(2);
+    list.push_front(3);
+    list.push_front(4);
+    List<int> list2{list};
+    REQUIRE(list == list2);
 }

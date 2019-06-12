@@ -88,7 +88,15 @@ public:
     // not implemented yet
     // do not forget about the initialiser list !
     /* Constructor: erstellt leere Liste */
-    List() {}
+    List(){}
+
+    List(List<T> const& original) {
+        auto original_elem = original.first_;
+        for(int i = 0; i < original.size_; ++i) {
+            push_back(original_elem->value);
+            original_elem = original_elem->next;
+        }
+    }
 
     /* Erstellt neue Liste mit allen Elementen aus alter Liste */
     //TODO: Copy-Konstruktor using Deep-Copy semantics (Aufgabe 4.8)
@@ -134,13 +142,13 @@ public:
             auto lhs_elem = first_;
             auto rhs_elem = rhs.first_;
             for(int i = 0; i < size_; ++i){
-                if(lhs_elem->value == rhs_elem->value){
-                    return false;
+                if(lhs_elem->value != rhs_elem->value){
+                    return true;
                 }
                 rhs_elem = rhs_elem->next;
                 lhs_elem = lhs_elem->next;
             }
-            return true;
+            return false;
         }
     }
 
