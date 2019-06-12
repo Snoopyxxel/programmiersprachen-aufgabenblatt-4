@@ -284,3 +284,24 @@ TEST_CASE("assignment operator", "[modifiers]"){
     REQUIRE(list.size() == 4);
     REQUIRE(list3 == list);
 }
+
+/*
+TEST_CASE("copy"){
+    List<int> list{0,1,2,3,4};
+    std::vector<int> vector;
+
+    std::copy(list.begin(), list.end(), vector.begin());
+
+    for(int i = 0; i < 4; ++i){
+        REQUIRE(i == vector[i]);
+    }
+}
+*/
+
+TEST_CASE("operator+ for two lists"){
+    List<int> list{1,2};
+    List<int> list1{5,6};
+    List<int> list2{1,2,5,6};
+
+    REQUIRE((list + list1) == list2);
+}

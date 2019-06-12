@@ -63,16 +63,16 @@ struct ListIterator {
         return ListIterator<T>{old_node};
     } //POSTINCREMENT (signature distinguishes)
 
-    /* ... */
+    /* returns true if nodes of iterators are equal */
     bool operator==(ListIterator<T> const& x) const {
         return node == x.node;
     }
 
-    /* ... */
+    /* returns false if nodes of iterators are equal */
     bool operator!=(ListIterator<T> const& x) const {
         return node != x.node;    }
 
-    /* ... */
+    /* returns an interator to the element in the list next to the original iterator */
     ListIterator<T> next() const {
         if (nullptr != node) {
             return ListIterator{node->next};
@@ -111,7 +111,7 @@ public:
         }
     }
 
-
+    //assigns values from rhs to this
     List<T>& operator=(List<T> rhs){
         rhs.swap(*this);
         return *this;
@@ -141,17 +141,12 @@ public:
         rhs.size_ = 0;
     }
 
-    //TODO: Initializer-List Konstruktor (4.14)
-
     /* Erstellt neue Liste mit übergebenen Werten als Knoten */
     List(std::initializer_list<T> ini_list) {
         for (int i = 0; i < ini_list.size(); ++i){
             push_back(*(ini_list.begin() + i));
         }
     }
-
-    /* ... */
-    //TODO: Assignment operator (Aufgabe 4.12)
 
     bool operator==(List<T> const& rhs){
         if(first_ == nullptr and rhs.first_ == nullptr){
@@ -197,12 +192,12 @@ public:
     }
 
     /* Returns iterator to start of List */
-    ListIterator<T> begin() {
+    ListIterator<T> begin() const {
         return ListIterator<T>{first_};
     }
 
     /* Returns Operator to end of List */
-    ListIterator<T> end() {
+    ListIterator<T> end() const {
         return ListIterator<T>{last_};
     }
 
@@ -309,7 +304,7 @@ public:
     }
 
     /* returns reference to value of first element*/
-    T& front() {
+    T& front() const {
         assert(!empty());
         /*
         if(empty()){
@@ -320,7 +315,7 @@ public:
     }
 
     /* returns reference to the last element of the list */
-    T& back() {
+    T& back() const {
         assert(!empty());
         /*
         if(empty()){
@@ -349,13 +344,20 @@ private:
 
 /* kehrt die Liste um */
 template <typename T>
-List<T> reverse(List<T> in){
+List<T> reverse(List<T> const& in){
     List<T> erg{in};
     erg.reverse();
     return erg;
 }
 
 /* adds the elements of Lists in one List */
-//TODO: Freie Funktion operator+ (4.14)
+template <typename T>
+List<T> operator+(List<T> const& lhs, List<T> const& rhs){
+    List<T> erg{lhs};
+    for(auto const& i : rhs){
+        erg.push_back(i);
+    }
+    return erg;
+}
 
 #endif // # define BUW_LIST_HPP
