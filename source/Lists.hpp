@@ -153,7 +153,9 @@ public:
             return true;
         } else if(first_ == nullptr xor rhs.first_ == nullptr){
             return false;
-        } else{
+        } else if(size_ != rhs.size_){
+            return false;
+        }else{
             auto lhs_elem = first_;
             auto rhs_elem = rhs.first_;
             for(int i = 0; i < size_; ++i){
@@ -171,6 +173,8 @@ public:
         if(first_ == nullptr and rhs.first_ == nullptr){
             return false;
         } else if(first_ == nullptr xor rhs.first_ == nullptr){
+            return true;
+        } else if(size_ != rhs.size_){
             return true;
         } else{
             auto lhs_elem = first_;
@@ -196,7 +200,7 @@ public:
         return ListIterator<T>{first_};
     }
 
-    /* Returns Operator to end of List */
+    /* Returns iterator to end of List */
     ListIterator<T> end() const {
         return ListIterator<T>{last_};
     }
@@ -218,6 +222,7 @@ public:
             ListNode<T>* in = new ListNode<T>{data, pos_it.node->prev, pos_it.node};
             in->prev->next = in;
             in->next->prev = in;
+            ++size_;
             return ListIterator<T>{in};
         }
     }
@@ -354,8 +359,8 @@ List<T> reverse(List<T> const& in){
 template <typename T>
 List<T> operator+(List<T> const& lhs, List<T> const& rhs){
     List<T> erg{lhs};
-    for(auto const& i : rhs){
-        erg.push_back(i);
+    for(int i = 0; i < rhs.size(); ++i){
+        erg.push_back(*rhs.begin() + i);
     }
     return erg;
 }

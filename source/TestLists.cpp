@@ -302,6 +302,7 @@ TEST_CASE("operator+ for two lists"){
     List<int> list{1,2};
     List<int> list1{5,6};
     List<int> list2{1,2,5,6};
+    List<int> list3 = list + list1;
 
-    REQUIRE((list + list1) == list2);
+    REQUIRE(list3 == list2);
 }
