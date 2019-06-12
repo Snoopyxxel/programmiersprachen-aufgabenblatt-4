@@ -151,3 +151,105 @@ TEST_CASE("copy constructor", "[constructor]"){
     List<int> list2{list};
     REQUIRE(list == list2);
 }
+
+TEST_CASE("operator+ for iterators", "[iterators]"){
+    List<int> list;
+    list.push_back(1);
+    list.push_back(2);
+    list.push_back(3);
+    list.push_back(4);
+    REQUIRE(*(list.begin() + 2) == 3);
+}
+
+TEST_CASE("insert", "[modifiers]") {
+    List<int> list;
+    list.push_back(1);
+    list.push_back(2);
+    list.push_back(3);
+    list.push_back(4);
+    List<int> list1;
+    list1.push_back(1);
+    list1.push_back(2);
+    list1.push_back(4);
+    list1.insert(3, list1.begin() + 2);
+    REQUIRE(list1 == list);
+    list.pop_front();
+    list.insert(1, list.begin());
+    REQUIRE(list1 == list);
+    List<int> list3;
+    list3.push_back(1);
+    list3.push_back(2);
+    list3.push_back(4);
+    list3.insert(3, list3.end() + 2);
+    REQUIRE(list3 == list);
+}
+
+TEST_CASE("member-reverse with more than two elements", "[modifiers]"){
+    List<int> list;
+    list.push_front(1);
+    list.push_front(2);
+    list.push_front(3);
+    list.push_front(4);
+
+    List<int> list1;
+    list1.push_back(1);
+    list1.push_back(2);
+    list1.push_back(3);
+    list1.push_back(4);
+
+    list.reverse();
+
+    REQUIRE(list == list1);
+}
+
+TEST_CASE("member-reverse with two elements", "[modifiers]"){
+    List<int> list3;
+    list3.push_front(1);
+    list3.push_front(2);
+    List<int> list4;
+    list4.push_back(1);
+    list4.push_back(2);
+
+    list3.reverse();
+    REQUIRE(list3 == list4);
+}
+
+TEST_CASE("free-funktion-reverse with more than two elements", "[modifiers]"){
+    List<int> list;
+    list.push_front(1);
+    list.push_front(2);
+    list.push_front(3);
+    list.push_front(4);
+
+    List<int> list1;
+    list1.push_back(1);
+    list1.push_back(2);
+    list1.push_back(3);
+    list1.push_back(4);
+
+    REQUIRE(reverse(list) == list1);
+}
+
+TEST_CASE("free-funktion-reverse with two elements", "[modifiers]"){
+    List<int> list3;
+    list3.push_front(1);
+    list3.push_front(2);
+    List<int> list4;
+    list4.push_back(1);
+    list4.push_back(2);
+
+    REQUIRE(reverse(list3) == list4);
+}
+
+TEST_CASE("move constructor", "[constructor]")
+{
+    List<int> list;
+    list.push_front(1);
+    list.push_front(2);
+    list.push_front(3);
+    list.push_front(4);
+    List<int> list2 = std::move(list);
+    REQUIRE(0 == list.size());
+    REQUIRE(list.empty());
+    REQUIRE(4 == list2.size());
+}

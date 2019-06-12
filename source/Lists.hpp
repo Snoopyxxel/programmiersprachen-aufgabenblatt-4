@@ -12,7 +12,7 @@ class List;
 
 template <typename T>
 struct ListNode {
-    T         value = T ();
+    T         value = T();
     ListNode* prev = nullptr;
     ListNode* next = nullptr;
 };
@@ -40,14 +40,26 @@ struct ListIterator {
 
     /* returns an iterator to the next element from self */
     ListIterator<T>& operator++() {
-        node = node->next;
+        if (node->next != nullptr) {
+            node = node->next;
+        }
         return *this;
+    }
+
+    ListIterator<T> operator+(int plus) {
+        ListIterator<T> erg{node};
+        for(int i = 0; i < plus; ++i){
+            ++erg;
+        }
+        return erg;
     }
 
     /* returns an iterator to  */
     ListIterator<T> operator++(int) {
         auto old_node = node;
-        node = node->next;
+        if (node->next != nullptr) {
+            node = node->next;
+        }
         return ListIterator<T>{old_node};
     } //POSTINCREMENT (signature distinguishes)
 
@@ -90,6 +102,7 @@ public:
     /* Constructor: erstellt leere Liste */
     List(){}
 
+    /* Erstellt neue Liste mit allen Elementen aus alter Liste */
     List(List<T> const& original) {
         auto original_elem = original.first_;
         for(int i = 0; i < original.size_; ++i) {
@@ -98,11 +111,35 @@ public:
         }
     }
 
-    /* Erstellt neue Liste mit allen Elementen aus alter Liste */
-    //TODO: Copy-Konstruktor using Deep-Copy semantics (Aufgabe 4.8)
+
+    List<T>& operator=(List<T> x){
+        x.swap(*this);
+        return *this;
+    }
+
+    void swap(List<T>& rhs){
+        auto this_first = first_;
+        auto this_last = last_;
+        first_ = rhs.first_;
+        last_ = rhs.last_;
+        rhs.first_ = this_first;
+        rhs.last_ = this_last;
+        auto this_size = size_;
+        size_ = rhs.size_;
+        rhs.size_ = this_size;
+    }
+
+    friend void swap(List<T>& lhs, List<T>& rhs) {lhs.swap(rhs);}
+
 
     /* Bewegt alle Objekte von alter Liste in neue Liste */
-    //TODO: Move-Konstruktor (Aufgabe 4.13)
+    List(List<T>&& rhs):
+        first_(rhs.first_), last_(rhs.last_) {
+        rhs.first_ = nullptr;
+        rhs.last_ = nullptr;
+        size_ = rhs.size_;
+        rhs.size_ = 0;
+    }
 
     //TODO: Initializer-List Konstruktor (4.14)
 
@@ -176,10 +213,35 @@ public:
     }
 
     /* Inserts a Node with given value at given position */
-    //TODO: member function insert
+    ListIterator<T> insert(T data, ListIterator<T> const& pos_it){
+        if(pos_it.node == first_){
+            push_front(data);
+            return begin();
+        } else {
+            ListNode<T>* in = new ListNode<T>{data, pos_it.node->prev, pos_it.node};
+            in->prev->next = in;
+            in->next->prev = in;
+            return ListIterator<T>{in};
+        }
+    }
 
     /* reverses the list */
-    //TODO: member function reverse
+    void reverse(){
+        if(size_ <= 1){
+            //do nothing
+        } else{
+            auto node = first_;
+            for(int i = 0; i < size_; ++i){
+                auto old_prev = node->prev;
+                node->prev = node->next;
+                node->next = old_prev;
+                node = node->prev;
+            }
+            auto old_first = first_;
+            first_ = last_;
+            last_ = old_first;
+        }
+    }
 
     /* Adds an element to the start of the list */
     void push_front(T const& element) {
@@ -229,7 +291,6 @@ public:
 
     /* deletes the last element of the list */
     void pop_back() {
-        assert(!empty());
         if(empty()){
         } else if(size_ == 1){
             --size_;
@@ -285,7 +346,12 @@ private:
 };
 
 /* kehrt die Liste um */
-//TODO: Freie Funktion reverse
+template <typename T>
+List<T> reverse(List<T> in){
+    List<T> erg{in};
+    erg.reverse();
+    return erg;
+}
 
 /* adds the elements of Lists in one List */
 //TODO: Freie Funktion operator+ (4.14)
